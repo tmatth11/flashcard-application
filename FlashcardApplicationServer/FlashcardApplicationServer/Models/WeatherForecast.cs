@@ -1,4 +1,4 @@
-namespace FlashcardApplicationServer
+namespace FlashcardApplicationServer.Models
 {
     public class WeatherForecast
     {
