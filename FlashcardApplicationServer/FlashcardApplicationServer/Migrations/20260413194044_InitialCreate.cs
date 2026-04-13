@@ -156,6 +156,46 @@ namespace FlashcardApplicationServer.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "FlashcardSets",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FlashcardSets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FlashcardSets_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Flashcards",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Term = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    Definition = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    SetId = table.Column<int>(type: "int", nullable: false),
+                    FlashcardSetId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Flashcards", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Flashcards_FlashcardSets_FlashcardSetId",
+                        column: x => x.FlashcardSetId,
+                        principalTable: "FlashcardSets",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -194,6 +234,16 @@ namespace FlashcardApplicationServer.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Flashcards_FlashcardSetId",
+                table: "Flashcards",
+                column: "FlashcardSetId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FlashcardSets_UserId",
+                table: "FlashcardSets",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -215,7 +265,13 @@ namespace FlashcardApplicationServer.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "Flashcards");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "FlashcardSets");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

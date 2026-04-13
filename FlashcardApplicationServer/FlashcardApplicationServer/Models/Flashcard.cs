@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace FlashcardApplicationServer.Models;
 
@@ -14,7 +15,8 @@ public class Flashcard
     [StringLength(500, MinimumLength = 1)]
     public string? Definition { get; set; }
 
-    [Required(ErrorMessage = "Error: SetId is required")]
     public int SetId { get; set; }
-    public FlashcardSet FlashcardSet { get; set; }
+
+    [JsonIgnore]
+    public FlashcardSet? FlashcardSet { get; set; }
 }
